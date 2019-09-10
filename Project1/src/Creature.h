@@ -15,12 +15,12 @@ public:
 	int preference;
 	Creature();
 	Creature(int name);
-	~Creature();
+	virtual ~Creature();
 	int getPreference();
 	void setPreference(int roomPreference);
-	int getName();
+	virtual int getName();
 	void setName(int name);
-	std::string getClass();
+	virtual std::string getClass();
 
 private:
 	int name;

@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include "Creature.h"
+#include "Animal.h"
+#include "NPC.h"
 #include "PC.h"
 
 class Room
@@ -25,6 +27,9 @@ public:
 	//Destructor
 	~Room();
 
+	void addAnimal(int name);
+	void addNPC(int name);
+
 	//Public methods
 	/**
 	 * Returns the integer of the neighbor given the direction.
@@ -45,12 +50,12 @@ public:
 	/**
 	 * Method to add an animal to the creature vector
 	 */
-	void addAnimal(std::string name);
+	void addAnimal(Animal *a);
 
 	/**
 	 * Adds an NPC to the room given it ins't full, adds the animal to creature Array
 	 */
-	void addNPC(int name);
+	void addNPC(NPC *npc);
 
 	/**
 	 * Adds the pc to the room
@@ -82,7 +87,7 @@ private:
 	int animalCount;
 	int npcCount;
 	std::vector<Creature*> creatureList;
-	Creature *creatureArray[10];
+	Creature* creatureArray[10];
 
 };
 #endif /* ROOM_H_ */

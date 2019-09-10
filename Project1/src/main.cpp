@@ -45,16 +45,11 @@ int main()
 		{
 			roomList[assignedRoom].addCreature(pc);
 		}
-		if(creatureType == 1 && i == 0)
+		if(creatureType == 1)
 		{
-			roomList[assignedRoom].addAnimal("Ralph");
+			roomList[assignedRoom].addAnimal(i);
 
 		}
-		if(creatureType == 1 && i == 1)
-				{
-					roomList[assignedRoom].addAnimal("Roy");
-
-				}
 		if(creatureType == 2)
 		{
 			roomList[assignedRoom].addNPC(i);

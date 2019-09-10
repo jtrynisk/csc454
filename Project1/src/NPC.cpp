@@ -16,3 +16,13 @@ NPC::~NPC()
 {
 
 }
+
+std::string NPC::getClass()
+{
+	return "NPC";
+}
+
+int NPC::getName()
+{
+	return name;
+}

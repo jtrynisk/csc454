@@ -8,17 +8,17 @@ class Animal : public Creature
 
 public:
 	//Constructors
-	Animal(string name);
+	Animal(int name);
 
 	//Destructor
 	~Animal();
 
 	std::string getClass();
 
-	std::string getName();
+	int getName();
 
 private:
-	std::string name;
+	int name;
 
 
 };

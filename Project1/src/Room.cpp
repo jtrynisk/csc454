@@ -1,7 +1,6 @@
 //Class the defines a room object
 #include "Room.h"
 #include <iostream>
-using namespace std;
 
 const int ROOM_LIMIT = 10;
 
@@ -26,7 +25,10 @@ Room::Room(int roomState, int north, int south, int east, int west, int number)
 	roomNumber = number;
 }
 
-Room::~Room(){}
+Room::~Room()
+{
+	creatureList.clear();
+}
 
 int Room::getNeighbor(std::string neighborDirection)
 {
@@ -55,15 +57,15 @@ void Room::setNeighbor(std::string neighborDirection, int neighborNumber)
 		{
 			northNeighbor = neighborNumber;
 		}
-		else if(neighborDirection == "south")
+	else if(neighborDirection == "south")
 		{
 			southNeighbor = neighborNumber;
 		}
-		else if(neighborDirection == "west")
+	else if(neighborDirection == "west")
 		{
 			westNeighbor = neighborNumber;
 		}
-		else if(neighborDirection == "east")
+	else if(neighborDirection == "east")
 		{
 			eastNeighbor = neighborNumber;
 		}
@@ -82,12 +84,39 @@ void Room::addCreature(Creature *c)
 	}
 }
 
-void Room::addAnimal(std::string name)
+void Room::addAnimal(Animal *a)
+{
+	if(creatureCount < ROOM_LIMIT)
+	{
+		creatureList.push_back(a);
+		creatureArray[creatureCount] = a;
+		creatureCount++;
+	}
+	else
+	{
+		std::cout << "Sorry room " << roomNumber << " is full.";;\
+	}
+}
+
+void Room::addAnimal(int name)
 {
 	if(creatureCount < ROOM_LIMIT)
 	{
 		creatureList.push_back(new Animal(name));
-		creatureArray[creatureCount] = new Animal(name);
+		creatureCount++;
+	}
+	else
+	{
+		std::cout << "Sorry room " << roomNumber << " is full.";;\
+	}
+}
+
+void Room::addNPC(NPC *npc)
+{
+	if(creatureCount < ROOM_LIMIT)
+	{
+		creatureList.push_back(npc);
+		creatureArray[creatureCount] = npc;
 		creatureCount++;
 	}
 	else
@@ -101,7 +130,6 @@ void Room::addNPC(int name)
 	if(creatureCount < ROOM_LIMIT)
 	{
 		creatureList.push_back(new NPC(name));
-		creatureArray[creatureCount] = new NPC(name);
 		creatureCount++;
 	}
 	else
@@ -127,8 +155,7 @@ void Room::getCreatures()
 
 	for (int i = 0; i < creatureCount; i++)
 	{
-		std::cout << "Vector " << creatureList.at(i)->getClass() << " " << creatureList.at(i)->getName() << '\n';
-		std::cout << "Array " << creatureArray[i]->getClass() << " " << creatureArray[i]->getName() << '\n';
+		std::cout << creatureList.at(i)->getClass() << " " << creatureList.at(i)->getName() << '\n';
 
 	}
 }

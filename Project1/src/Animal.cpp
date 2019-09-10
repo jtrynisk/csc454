@@ -3,7 +3,7 @@
 #include "Creature.h"
 #include <iostream>
 
-Animal::Animal(string name)
+Animal::Animal(int name)
 {
 	this->name = name;
 	this->setPreference(CLEAN);
@@ -14,7 +14,7 @@ std::string Animal::getClass()
 	return "Animal";
 }
 
-std::string Animal::getName()
+int Animal::getName()
 {
 	return name;
 }

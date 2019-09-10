@@ -13,6 +13,9 @@ public:
 	//Destructor
 	~NPC();
 
+	std::string getClass();
+	int getName();
+
 private:
 	int name;
 
