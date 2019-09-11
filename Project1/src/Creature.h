@@ -5,8 +5,8 @@
 
 enum roomPreference
 {
-    CLEAN,
-    DIRTY
+    CLEAN = 0,
+    DIRTY = 2
 };
 
 class Creature{
@@ -21,9 +21,11 @@ public:
 	virtual int getName();
 	void setName(int name);
 	virtual std::string getClass();
+	virtual bool checkPreference(int state);
 
 private:
 	int name;
+//	Room roomAssignment;
 
 
 };

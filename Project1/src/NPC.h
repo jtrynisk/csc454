@@ -15,6 +15,7 @@ public:
 
 	std::string getClass();
 	int getName();
+	bool checkPreference(int state);
 
 private:
 	int name;

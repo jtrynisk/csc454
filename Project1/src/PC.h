@@ -17,10 +17,17 @@ public:
 	int getRespect();
 	void decrementRespect();
 	void incrementRespect();
+	void changeRespect(int change);
+	void setRoom(int roomNum);
+	int getRoom();
+	std::string getClass();
+
 
 private:
 
+	int name;
 	int respect;
+	int roomNum;
 
 
 };

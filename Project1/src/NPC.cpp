@@ -26,3 +26,12 @@ int NPC::getName()
 {
 	return name;
 }
+
+bool NPC::checkPreference(int state)
+{
+	if(state == preference || state == 1)
+	{
+		return true;
+	}
+	return false;
+}

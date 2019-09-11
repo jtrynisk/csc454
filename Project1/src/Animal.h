@@ -14,7 +14,7 @@ public:
 	~Animal();
 
 	std::string getClass();
-
+	bool checkPreference(int state);
 	int getName();
 
 private:

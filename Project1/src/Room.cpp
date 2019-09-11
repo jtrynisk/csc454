@@ -71,6 +71,31 @@ void Room::setNeighbor(std::string neighborDirection, int neighborNumber)
 		}
 }
 
+void Room::getNeighbors()
+{
+	std::string tempString;
+	if(northNeighbor != -1)
+	{
+		std::cout << "North neighbor is " <<  northNeighbor << ". \n";
+	}
+	if(southNeighbor != -1)
+	{
+		std::cout << "South neighbor is " << southNeighbor << ". \n";
+	}
+	if(eastNeighbor != -1)
+	{
+		std::cout << "East neighbor is " << northNeighbor << ". \n";
+	}
+	if(westNeighbor != -1)
+	{
+		std::cout << "West neighbor is " << northNeighbor << ". \n";
+	}
+	if(northNeighbor == -1 && southNeighbor == -1 && eastNeighbor == -1 && westNeighbor == -1)
+	{
+		std::cout << "No neighbors in this room." << '\n';
+	}
+}
+
 void Room::addCreature(Creature *c)
 {
 	if(creatureCount < ROOM_LIMIT)
@@ -138,15 +163,16 @@ void Room::addNPC(int name)
 	}
 }
 
-void Room::addPC(PC pc)
+void Room::removeCreature(int name)
 {
-	if(creatureCount < ROOM_LIMIT)
+	for(int i = 0; i < creatureList.size(); i++)
 	{
-		//this->creatureList[creatureCount++] = &pc;
-	}
-	else
-	{
-		std::cout << "Sorry too many creatures in room " << roomNumber << "." << '\n';
+		if(creatureList.at(i)->getName() == name)
+		{
+			creatureList.erase(creatureList.begin() + i);
+			creatureList.shrink_to_fit();
+			creatureCount--;
+		}
 	}
 }
 
@@ -180,4 +206,108 @@ std::string Room::getState()
 void Room::setState(int state)
 {
 	this->state = state;
+}
+
+bool Room::checkMove(int name, std::string direction)
+{
+	bool canMove = false;
+	for(int i = 0; i < creatureList.size(); i++)
+	{
+		if(creatureList.at(i)->getName() == name)
+		{
+			canMove = true;
+		}
+	}
+
+	if(direction == "north")
+	{
+		if(northNeighbor == -1)
+		{
+			std::cout << "No room in that direction" << '\n';
+			return false;
+		}
+		else
+		{
+			canMove = true;
+		}
+	}
+
+	else if(direction == "south")
+	{
+		if(southNeighbor == -1)
+		{
+			std::cout << "No room in that direction" << '\n';
+			return false;
+		}
+		else
+		{
+			canMove = true;
+		}
+	}
+
+	else if(direction == "east")
+	{
+		if(eastNeighbor == -1)
+		{
+			std::cout << "No room in that direction" << '\n';
+			return false;
+		}
+		else
+		{
+			canMove = true;
+		}
+	}
+
+	else if(direction == "west")
+	{
+		if(westNeighbor == -1)
+		{
+			std::cout << "No room in that direction" << '\n';
+			return false;
+		}
+		else
+		{
+			canMove = true;
+		}
+	}
+
+	return canMove;
+}
+
+void Room::reactToChangedState(PC *pc, std::string command)
+{
+	for(int i = 0; i < creatureList.size(); i++)
+	{
+		if(creatureList.at(i)->getClass() == "Animal")
+		{
+			if(command == "clean")
+			{
+				std::cout << creatureList.at(i)->getName() << " licks your face." << '\n';
+				pc->incrementRespect();
+			}
+			if(command == "dirty")
+			{
+				std::cout << creatureList.at(i)->getName() << " growls at you." << '\n';
+				pc->decrementRespect();
+			}
+			if(state == 2)
+			{
+				char directions[] = {"n", "s", "e", "w"};
+			}
+		}
+
+		if(creatureList.at(i)->getClass() == "NPC")
+		{
+			if(command == "clean")
+			{
+				std::cout << creatureList.at(i)->getName() << " grumbles at you." << '\n';
+				pc->decrementRespect();
+			}
+			if(command == "dirty")
+			{
+				std::cout << creatureList.at(i)->getName() << " smiles at you." << '\n';
+				pc->incrementRespect();
+			}
+		}
+	}
 }

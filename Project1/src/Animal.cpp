@@ -20,3 +20,11 @@ int Animal::getName()
 }
 Animal::~Animal(){}
 
+bool Animal::checkPreference(int state)
+{
+	if(state == preference || state == 1)
+	{
+		return true;
+	}
+	return false;
+}

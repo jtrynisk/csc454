@@ -58,11 +58,6 @@ public:
 	void addNPC(NPC *npc);
 
 	/**
-	 * Adds the pc to the room
-	 */
-	void addPC(PC pc);
-
-	/**
 	 * removes a creature from the creature array.
 	 */
 	void removeCreature(Creature c);
@@ -73,6 +68,11 @@ public:
 	void getCreatures();
 
 	/**
+	 * Method that removes a creature from the vector
+	 */
+	void removeCreature(int name);
+
+	/**
 	 * Returns the state of the room
 	 */
 	std::string getState();
@@ -81,6 +81,21 @@ public:
 	 * Sets the state of the room
 	 */
 	void setState(int state);
+
+	/**
+	 * Checks if a creature can move to a neighbor
+	 */
+	bool checkMove(int name, std::string direction);
+
+	/**
+	 * Prints a string of the neighbors for the look command
+	 */
+	void getNeighbors();
+
+	/**
+	 * Method to adjust PC respect based off state change.
+	 */
+	void reactToChangedState(PC *pc, std::string command);
 
 private:
 	int creatureCount;
