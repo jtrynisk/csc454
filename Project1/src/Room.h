@@ -99,19 +99,30 @@ public:
 	 */
 	void reactToChangedState(PC *pc, std::string command);
 
-
+	/**
+	 * returns the room number
+	 */
 	int getRoomNumber() const {
 		return roomNumber;
 	}
 
+	/**
+	 * takes an int to set the roomNumber to.
+	 */
 	void setRoomNumber(int roomNumber) {
 		this->roomNumber = roomNumber;
 	}
 
+	/**
+	 * returns the amount of creatures in the room
+	 */
 	int getCreatureCount() const {
 		return creatureCount;
 	}
 
+	/**
+	 * sets the creaturecount
+	 */
 	void setCreatureCount(int creatureCount) {
 		this->creatureCount = creatureCount;
 	}

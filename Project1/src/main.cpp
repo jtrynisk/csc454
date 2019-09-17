@@ -10,9 +10,7 @@ using namespace std;
 
 int main()
 {
-	int state, northNeighbor, southNeighbor, eastNeighbor, westNeighbor, numberOfAnimals, animalCount, npcCount;
-	//initialize counts
-	animalCount = 0, npcCount = 0;
+	int state, northNeighbor, southNeighbor, eastNeighbor, westNeighbor, numberOfAnimals;
 
 
 	std::cin >> numberOfRooms;
@@ -50,16 +48,6 @@ int main()
 		{
 			roomList[assignedRoom].addNPC(i);
 		}
-	}
-
-	for(int i = 0; i < numberOfRooms; i++)
-	{
-		std::cout << "Room state: " << roomList[i].getState() << '\n';
-		std::cout << "Room's north neighbor " << roomList[i].getNeighbor("north") << '\n';
-		std::cout << "Room's south neighbor " << roomList[i].getNeighbor("south") << '\n';
-		std::cout << "Room's east neighbor " << roomList[i].getNeighbor("east") << '\n';
-		std::cout << "Room's west neighbor " << roomList[i].getNeighbor("west") << '\n';
-		roomList[i].getCreatures();
 	}
 
 	while(input != "exit")

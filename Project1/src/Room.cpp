@@ -168,7 +168,7 @@ void Room::addNPC(int name)
 
 void Room::removeCreature(int name)
 {
-	for(int i = 0; i < creatureList.size(); i++)
+	for(unsigned i = 0; i < creatureList.size(); i++)
 	{
 		if(creatureList.at(i)->getName() == name)
 		{
@@ -266,7 +266,7 @@ bool Room::checkMove(std::string direction)
 
 void Room::reactToChangedState(PC *pc, std::string command)
 {
-	for(int i = 0; i < creatureList.size(); i++)
+	for(unsigned i = 0; i < creatureList.size(); i++)
 	{
 		if(creatureList.at(i)->getClass() == "Animal")
 		{
@@ -312,7 +312,7 @@ void Room::reactToChangedState(PC *pc, std::string command)
 				{
 					std::cout << creatureList.at(i)->getName() << " drills a hole through the ceiling and leaves." << '\n';
 					removeCreature(creatureList.at(i)->getName());
-					for(int k = 0; k < creatureList.size(); k++)
+					for(unsigned k = 0; k < creatureList.size(); k++)
 					{
 						if(creatureList.at(k)->getClass() == "Animal")
 						{
@@ -368,7 +368,7 @@ void Room::reactToChangedState(PC *pc, std::string command)
 				{
 					std::cout << creatureList.at(i)->getName() << " drills a hole through the ceiling and leaves." << '\n';
 					removeCreature(creatureList.at(i)->getName());
-					for(int k = 0; k < creatureList.size(); k++)
+					for(unsigned k = 0; k < creatureList.size(); k++)
 					{
 						if(creatureList.at(k)->getClass() == "NPC")
 						{
