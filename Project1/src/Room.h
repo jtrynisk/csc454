@@ -19,6 +19,8 @@ public:
 	int southNeighbor;
 	int eastNeighbor;
 	int westNeighbor;
+	std::vector<Creature*> creatureList;
+
 
 	//Constructor
 	Room();
@@ -85,7 +87,7 @@ public:
 	/**
 	 * Checks if a creature can move to a neighbor
 	 */
-	bool checkMove(int name, std::string direction);
+	bool checkMove(std::string direction);
 
 	/**
 	 * Prints a string of the neighbors for the look command
@@ -97,12 +99,25 @@ public:
 	 */
 	void reactToChangedState(PC *pc, std::string command);
 
+
+	int getRoomNumber() const {
+		return roomNumber;
+	}
+
+	void setRoomNumber(int roomNumber) {
+		this->roomNumber = roomNumber;
+	}
+
+	int getCreatureCount() const {
+		return creatureCount;
+	}
+
+	void setCreatureCount(int creatureCount) {
+		this->creatureCount = creatureCount;
+	}
+
 private:
 	int creatureCount;
-	int animalCount;
-	int npcCount;
-	std::vector<Creature*> creatureList;
-	Creature* creatureArray[10];
 
 };
 #endif /* ROOM_H_ */

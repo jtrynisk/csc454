@@ -6,9 +6,10 @@
 using namespace std;
 
 
-NPC::NPC(int name)
+NPC::NPC(int name, int roomNum)
 {
 	this->name = name;
+	this->roomNum = roomNum;
 	this->setPreference(DIRTY);
 }
 
@@ -34,4 +35,14 @@ bool NPC::checkPreference(int state)
 		return true;
 	}
 	return false;
+}
+
+void NPC::setRoom(int roomNum)
+{
+	this->roomNum = roomNum;
+}
+
+int NPC::getRoom()
+{
+	return roomNum;
 }

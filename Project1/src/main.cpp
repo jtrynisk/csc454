@@ -10,13 +10,12 @@ using namespace std;
 
 int main()
 {
-	int numberOfRooms, state, northNeighbor, southNeighbor, eastNeighbor, westNeighbor, numberOfAnimals, animalCount, npcCount;
+	int state, northNeighbor, southNeighbor, eastNeighbor, westNeighbor, numberOfAnimals, animalCount, npcCount;
 	//initialize counts
 	animalCount = 0, npcCount = 0;
 
 
 	std::cin >> numberOfRooms;
-	Room roomList[numberOfRooms];
 	PC *pc = new PC();
 	std::string input;
 
@@ -29,9 +28,7 @@ int main()
 		roomList[i].setNeighbor("east", eastNeighbor);
 		roomList[i].setNeighbor("west", westNeighbor);
 		roomList[i].setState(state);
-
-
-
+		roomList[i].setRoomNumber(i);
 	}
 
 	int creatureType = 0, assignedRoom = 0;
@@ -71,13 +68,14 @@ int main()
 		std::cout << "Please enter a command(Enter help for a list of commands): " << '\n';
 		std::cin >> input;
 
-		if(input == "move")
+		if(input == "east" || input == "north" || input == "south" || input == "west")
 		{
-			std::string direction = "north";
-			if(roomList[currentRoom].checkMove(pc->getName(), direction))
+			if(roomList[currentRoom].checkMove(input))
 			{
-				int newRoom = roomList[currentRoom].getNeighbor(direction);
+				int newRoom = roomList[currentRoom].getNeighbor(input);
 				roomList[newRoom].addCreature(pc);
+				pc->setRoom(newRoom);
+				std::cout << "PC leaves to the " << input << '\n';
 				roomList[currentRoom].removeCreature(pc->getName());
 			}
 
@@ -117,7 +115,121 @@ int main()
 
 		else if(input.find(":") != std::string::npos)
 		{
-				//logic for creature clean, dirty, move
+			std::string creatureClass;
+			std::string stringCreature = input.substr(0, input.find(":"));
+			int tempCreature = std::stoi(stringCreature, nullptr);
+			std::string command = input.substr(2, std::string::npos);
+
+			if(command == "clean")
+			{
+				for(int i = 0; i < roomList[currentRoom].getCreatureCount(); i++)
+				{
+					if(roomList[currentRoom].creatureList.at(i)->getName() == tempCreature)
+					{
+						creatureClass = roomList[currentRoom].creatureList.at(i)->getClass();
+					}
+				}
+				if(creatureClass == "NPC")
+				{
+					pc->decrementRespect();
+					pc->decrementRespect();
+					pc->decrementRespect();
+					std::cout << tempCreature << " grumbles alot." << '\n';
+					if(roomList[currentRoom].getState() == "half-dirty")
+					{
+						roomList[currentRoom].setState(0);
+						roomList[currentRoom].reactToChangedState(pc, input);
+						std::cout << "PC respect: " << pc->getRespect() << '\n';
+					}
+					else if(roomList[currentRoom].getState() == "dirty")
+					{
+						roomList[currentRoom].setState(1);
+						roomList[currentRoom].reactToChangedState(pc, input);
+						std::cout << "PC respect: " << pc->getRespect() << '\n';
+					}
+				}
+				else
+				{
+					pc->incrementRespect();
+					pc->incrementRespect();
+					pc->incrementRespect();
+					std::cout << tempCreature << " licks your face alot." << '\n';
+					if(roomList[currentRoom].getState() == "half-dirty")
+					{
+						roomList[currentRoom].setState(0);
+						roomList[currentRoom].reactToChangedState(pc, input);
+						std::cout << "PC respect: " << pc->getRespect() << '\n';
+					}
+					else if(roomList[currentRoom].getState() == "dirty")
+					{
+						roomList[currentRoom].setState(1);
+						roomList[currentRoom].reactToChangedState(pc, input);
+						std::cout << "PC respect: " << pc->getRespect() << '\n';
+					}
+				}
+			}
+
+			if(command == "dirty")
+			{
+				for(int i = 0; i < roomList[currentRoom].getCreatureCount(); i++)
+				{
+					if(roomList[currentRoom].creatureList.at(i)->getName() == tempCreature)
+					{
+						creatureClass = roomList[currentRoom].creatureList.at(i)->getClass();
+					}
+				}
+
+				if(creatureClass == "Animal")
+				{
+					pc->decrementRespect();
+					pc->decrementRespect();
+					pc->decrementRespect();
+					std::cout << tempCreature << " growls alot." << '\n';
+					if(roomList[currentRoom].getState() == "half-dirty")
+					{
+						roomList[currentRoom].setState(2);
+						roomList[currentRoom].reactToChangedState(pc, input);
+						std::cout << "PC respect: " << pc->getRespect() << '\n';
+					}
+					else if(roomList[currentRoom].getState() == "clean")
+					{
+						roomList[currentRoom].setState(1);
+						roomList[currentRoom].reactToChangedState(pc, input);
+						std::cout << "PC respect: " << pc->getRespect() << '\n';
+					}
+				}
+				else
+				{
+					pc->incrementRespect();
+					pc->incrementRespect();
+					pc->incrementRespect();
+					std::cout << tempCreature << " smiles alot." << '\n';
+					if(roomList[currentRoom].getState() == "half-dirty")
+					{
+						roomList[currentRoom].setState(2);
+						roomList[currentRoom].reactToChangedState(pc, input);
+						std::cout << "PC respect: " << pc->getRespect() << '\n';
+					}
+					else if(roomList[currentRoom].getState() == "clean")
+					{
+						roomList[currentRoom].setState(1);
+						roomList[currentRoom].reactToChangedState(pc, input);
+						std::cout << "PC respect: " << pc->getRespect() << '\n';
+					}
+				}
+
+
+			}
+
+			if(command == "north" || command == "south" || command == "east" || command == "west")
+			{
+				if(roomList[currentRoom].checkMove(command))
+				{
+					int newRoom = roomList[currentRoom].getNeighbor(command);
+					roomList[currentRoom].removeCreature(tempCreature);
+					roomList[newRoom].addAnimal(tempCreature);
+				}
+			}
 		}
 
 		else if(input == "look")
@@ -127,7 +239,9 @@ int main()
 			{
 				if(roomList[i].roomNumber == tempRoom)
 				{
+					std::cout << "Current Room: " << roomList[i].roomNumber << '\n';
 					roomList[i].getNeighbors();
+					std::cout << "Contains ";
 					roomList[i].getCreatures();
 					std::cout << "Current state: " << roomList[i].getState() << '\n';
 				}

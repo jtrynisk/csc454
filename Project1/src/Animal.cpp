@@ -1,12 +1,12 @@
 //A class that will define a creature
 #include "Animal.h"
-#include "Creature.h"
 #include <iostream>
 
-Animal::Animal(int name)
+Animal::Animal(int name, int roomNum)
 {
 	this->name = name;
 	this->setPreference(CLEAN);
+	this->room = roomNum;
 }
 
 std::string Animal::getClass()
@@ -18,7 +18,6 @@ int Animal::getName()
 {
 	return name;
 }
-Animal::~Animal(){}
 
 bool Animal::checkPreference(int state)
 {
@@ -28,3 +27,14 @@ bool Animal::checkPreference(int state)
 	}
 	return false;
 }
+
+int Animal::getRoom()
+{
+	return room;
+}
+
+void Animal::setRoom(int roomNum)
+{
+	this->room = roomNum;
+}
+

@@ -4,6 +4,9 @@
 
 const int ROOM_LIMIT = 10;
 
+Room roomList[10];
+int numberOfRooms;
+
 Room::Room()
 {
 	northNeighbor = -1;
@@ -11,7 +14,7 @@ Room::Room()
 	westNeighbor = -1;
 	eastNeighbor = -1;
 	creatureCount = 0;
-	state = 0, roomNumber = 0, npcCount = 0, animalCount = 0;
+	state = 0, roomNumber = 0;
 }
 
 Room::Room(int roomState, int north, int south, int east, int west, int number)
@@ -21,7 +24,7 @@ Room::Room(int roomState, int north, int south, int east, int west, int number)
 	southNeighbor = south;
 	westNeighbor = west;
 	eastNeighbor = east;
-	creatureCount = 0, npcCount = 0, animalCount = 0;
+	creatureCount = 0;
 	roomNumber = number;
 }
 
@@ -84,11 +87,11 @@ void Room::getNeighbors()
 	}
 	if(eastNeighbor != -1)
 	{
-		std::cout << "East neighbor is " << northNeighbor << ". \n";
+		std::cout << "East neighbor is " << eastNeighbor << ". \n";
 	}
 	if(westNeighbor != -1)
 	{
-		std::cout << "West neighbor is " << northNeighbor << ". \n";
+		std::cout << "West neighbor is " << westNeighbor << ". \n";
 	}
 	if(northNeighbor == -1 && southNeighbor == -1 && eastNeighbor == -1 && westNeighbor == -1)
 	{
@@ -114,7 +117,7 @@ void Room::addAnimal(Animal *a)
 	if(creatureCount < ROOM_LIMIT)
 	{
 		creatureList.push_back(a);
-		creatureArray[creatureCount] = a;
+		//creatureArray[creatureCount] = a;
 		creatureCount++;
 	}
 	else
@@ -127,7 +130,7 @@ void Room::addAnimal(int name)
 {
 	if(creatureCount < ROOM_LIMIT)
 	{
-		creatureList.push_back(new Animal(name));
+		creatureList.push_back(new Animal(name, this->roomNumber));
 		creatureCount++;
 	}
 	else
@@ -141,7 +144,7 @@ void Room::addNPC(NPC *npc)
 	if(creatureCount < ROOM_LIMIT)
 	{
 		creatureList.push_back(npc);
-		creatureArray[creatureCount] = npc;
+		//creatureArray[creatureCount] = npc;
 		creatureCount++;
 	}
 	else
@@ -154,7 +157,7 @@ void Room::addNPC(int name)
 {
 	if(creatureCount < ROOM_LIMIT)
 	{
-		creatureList.push_back(new NPC(name));
+		creatureList.push_back(new NPC(name, roomNumber));
 		creatureCount++;
 	}
 	else
@@ -208,27 +211,17 @@ void Room::setState(int state)
 	this->state = state;
 }
 
-bool Room::checkMove(int name, std::string direction)
+bool Room::checkMove(std::string direction)
 {
-	bool canMove = false;
-	for(int i = 0; i < creatureList.size(); i++)
-	{
-		if(creatureList.at(i)->getName() == name)
-		{
-			canMove = true;
-		}
-	}
-
 	if(direction == "north")
 	{
 		if(northNeighbor == -1)
 		{
-			std::cout << "No room in that direction" << '\n';
 			return false;
 		}
 		else
 		{
-			canMove = true;
+			return true;
 		}
 	}
 
@@ -236,12 +229,11 @@ bool Room::checkMove(int name, std::string direction)
 	{
 		if(southNeighbor == -1)
 		{
-			std::cout << "No room in that direction" << '\n';
 			return false;
 		}
 		else
 		{
-			canMove = true;
+			return true;
 		}
 	}
 
@@ -249,12 +241,11 @@ bool Room::checkMove(int name, std::string direction)
 	{
 		if(eastNeighbor == -1)
 		{
-			std::cout << "No room in that direction" << '\n';
 			return false;
 		}
 		else
 		{
-			canMove = true;
+			return true;
 		}
 	}
 
@@ -262,16 +253,15 @@ bool Room::checkMove(int name, std::string direction)
 	{
 		if(westNeighbor == -1)
 		{
-			std::cout << "No room in that direction" << '\n';
 			return false;
 		}
 		else
 		{
-			canMove = true;
+			return true;
 		}
 	}
 
-	return canMove;
+	return false;
 }
 
 void Room::reactToChangedState(PC *pc, std::string command)
@@ -292,7 +282,45 @@ void Room::reactToChangedState(PC *pc, std::string command)
 			}
 			if(state == 2)
 			{
-				char directions[] = {"n", "s", "e", "w"};
+				std::cout << creatureList.at(i)->getName() << " growls at you." << '\n';
+				pc->decrementRespect();
+				bool successfulMove = 0x00;
+				std::string directions[] = {"north", "south", "east", "west"};
+				for(int j = 0; j < 4; j++)
+				{
+					int attemptedMove = std::rand() % 4;
+					if(checkMove(directions[attemptedMove]))
+					{
+						successfulMove = true;
+						int newRoom = getNeighbor(directions[attemptedMove]);
+						std::cout << creatureList.at(i)->getName() << " leaves to the " << directions[attemptedMove] << "." << '\n';
+						for(int k = 0; k < numberOfRooms; k++)
+						{
+							if(roomList[k].getRoomNumber() == newRoom)
+							{
+								roomList[k].addAnimal(creatureList.at(i)->getName());
+								if(roomList[k].getState() == "dirty")
+								{
+									roomList[k].setState(1);
+								}
+								removeCreature(creatureList.at(i)->getName());
+							}
+						}
+					}
+				}
+				if(!successfulMove)
+				{
+					std::cout << creatureList.at(i)->getName() << " drills a hole through the ceiling and leaves." << '\n';
+					removeCreature(creatureList.at(i)->getName());
+					for(int k = 0; k < creatureList.size(); k++)
+					{
+						if(creatureList.at(k)->getClass() == "Animal")
+						{
+							pc->decrementRespect();
+							std::cout << creatureList.at(k)->getName() << " growls at you." << '\n';
+						}
+					}
+				}
 			}
 		}
 
@@ -307,6 +335,48 @@ void Room::reactToChangedState(PC *pc, std::string command)
 			{
 				std::cout << creatureList.at(i)->getName() << " smiles at you." << '\n';
 				pc->incrementRespect();
+			}
+			if(state == 0)
+			{
+				std::cout << creatureList.at(i)->getName() << " grumbles at you." << '\n';
+				pc->decrementRespect();
+				bool successfulMove = 0x00;
+				std::string directions[] = {"north", "south", "east", "west"};
+				for(int j = 0; j < 4; j++)
+				{
+					int attemptedMove = std::rand() % 4;
+					if(checkMove(directions[attemptedMove]))
+					{
+						successfulMove = true;
+						int newRoom = getNeighbor(directions[attemptedMove]);
+						for(int k = 0; k < numberOfRooms; k++)
+						{
+							if(roomList[k].getRoomNumber() == newRoom)
+							{
+								std::cout << creatureList.at(i)->getName() << " leaves to the " << directions[attemptedMove] << "." << '\n';
+								roomList[k].addNPC(creatureList.at(i)->getName());
+								if(roomList[k].getState() == "clean")
+								{
+									roomList[k].setState(1);
+								}
+								removeCreature(creatureList.at(i)->getName());
+							}
+						}
+					}
+				}
+				if(!successfulMove)
+				{
+					std::cout << creatureList.at(i)->getName() << " drills a hole through the ceiling and leaves." << '\n';
+					removeCreature(creatureList.at(i)->getName());
+					for(int k = 0; k < creatureList.size(); k++)
+					{
+						if(creatureList.at(k)->getClass() == "NPC")
+						{
+							pc->decrementRespect();
+							std::cout << creatureList.at(k)->getName() << " grumbles at you." << '\n';
+						}
+					}
+				}
 			}
 		}
 	}
