@@ -250,6 +250,7 @@ int main()
 
 		else if(input == "exit")
 		{
+			delete pc;
 			break;
 		}
 		else
@@ -257,6 +258,4 @@ int main()
 			std::cout << "Sorry command not recognized!" << '\n';
 		}
 	}
-
-	delete pc;
 }

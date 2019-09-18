@@ -172,7 +172,8 @@ void Room::removeCreature(int name)
 	{
 		if(creatureList.at(i)->getName() == name)
 		{
-			creatureList.erase(creatureList.begin() + i);
+			delete creatureList.at(i);
+			//creatureList.erase(creatureList.begin() + i);
 			creatureList.shrink_to_fit();
 			creatureCount--;
 		}
@@ -266,6 +267,7 @@ bool Room::checkMove(std::string direction)
 
 void Room::reactToChangedState(PC *pc, std::string command)
 {
+	std::vector<int> toRemove;
 	for(unsigned i = 0; i < creatureList.size(); i++)
 	{
 		if(creatureList.at(i)->getClass() == "Animal")
@@ -311,7 +313,7 @@ void Room::reactToChangedState(PC *pc, std::string command)
 				if(!successfulMove)
 				{
 					std::cout << creatureList.at(i)->getName() << " drills a hole through the ceiling and leaves." << '\n';
-					removeCreature(creatureList.at(i)->getName());
+					toRemove.push_back(creatureList.at(i)->getName());
 					for(unsigned k = 0; k < creatureList.size(); k++)
 					{
 						if(creatureList.at(k)->getClass() == "Animal")
@@ -359,7 +361,7 @@ void Room::reactToChangedState(PC *pc, std::string command)
 								{
 									roomList[k].setState(1);
 								}
-								removeCreature(creatureList.at(i)->getName());
+								toRemove.push_back(creatureList.at(i)->getName());
 							}
 						}
 					}
@@ -379,5 +381,10 @@ void Room::reactToChangedState(PC *pc, std::string command)
 				}
 			}
 		}
+	}
+
+	for(unsigned i = 0; i < toRemove.size(); i++)
+	{
+		removeCreature(toRemove.at(i));
 	}
 }
