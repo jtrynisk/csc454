@@ -11,6 +11,17 @@ public class VendingMachine
     private boolean changeButton;
     private boolean coffeeDispensed;
 
+    /**
+     * Constructs the vending machine state
+     * @param q
+     *          initial amount of quarters.
+     * @param n
+     *          inital amount of nickels.
+     * @param d
+     *          initial amount of dimes.
+     * @param changeButton
+     *          if the change button is pressed.
+     */
     public VendingMachine(int q, int n, int d, boolean changeButton)
     {
         this.quarters = q;
@@ -19,8 +30,17 @@ public class VendingMachine
         this.changeButton = changeButton;
     }
 
-
-
+    /**
+     * Processes input given from the command line.
+     * @param q
+     *          amount of quarters given
+     * @param n
+     *          amount of nickels given
+     * @param d
+     *          amount of dimes given
+     * @param buttonPressed
+     *          boolean for if change button is pressed
+     */
     public void processInput(int q, int n, int d, boolean buttonPressed)
     {
         String output = "";
@@ -29,6 +49,11 @@ public class VendingMachine
         delta(q, n, d, buttonPressed);
     }
 
+    /**
+     * Gives the output based on the current state of the machine
+     * @return
+     *          returns the output string.
+     */
     private String lambda()
     {
         output = "";
@@ -56,6 +81,17 @@ public class VendingMachine
         return output;
     }
 
+    /**
+     * Takes in from input and changes the state of the vending machine
+     * @param q
+     *          quarters given
+     * @param n
+     *          nickels given
+     * @param d
+     *          dimes given
+     * @param buttonPressed
+     *          bool for if the change button is pressed
+     */
     private void delta(int q, int n, int d, boolean buttonPressed)
     {
 
@@ -84,6 +120,12 @@ public class VendingMachine
         }
     }
 
+    /**
+     * Calculates the change based off the total inserted during the process input
+     *
+     * @throws SimulationException
+     *          if not enough change is in the machine an exception is thrown.
+     */
     private void change() throws SimulationException
     {
         double change = totalInserted % 100;

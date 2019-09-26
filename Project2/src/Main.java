@@ -12,8 +12,7 @@ public class Main
         input = sc.next();
         char[] inputArr = input.toCharArray();
 
-
-
+        //Gets initial input for state of the machine
         for(int i = 0; i < inputArr.length; i++)
         {
             if(inputArr[i] == 'q')
@@ -30,6 +29,7 @@ public class Main
             }
         }
 
+        //Creates the vending machine based off initial input.
         VendingMachine vm = new VendingMachine(q, n, d, false);
 
         while(!input.equals("exit"))
