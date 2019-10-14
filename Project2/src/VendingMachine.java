@@ -6,7 +6,7 @@ public class VendingMachine
 {
     DecimalFormat format = new DecimalFormat("##.##");
     private int quarters, nickels, dimes, total, numCoffees = 0;
-    private String changeReturned = "", output = "";
+    private String output = "";
     private double totalInserted;
     private boolean changeButton;
     private boolean coffeeDispensed;
@@ -71,8 +71,12 @@ public class VendingMachine
         if(changeButton)
         {
             flag = false;
-            output += ("Change " + changeReturned);
-            changeReturned = "";
+            try {
+                output += ("Change " + change(false));
+            }catch(SimulationException e)
+            {
+                System.out.println("Sorry not enough change please contact management");
+            }
         }
         if(flag)
         {
@@ -111,7 +115,7 @@ public class VendingMachine
         }
         if(changeButton) {
             try {
-                change();
+                change(true);
             } catch (SimulationException e) {
                 System.out.println("Insufficient change please contact management.");
                 e.printStackTrace();
@@ -126,8 +130,9 @@ public class VendingMachine
      * @throws SimulationException
      *          if not enough change is in the machine an exception is thrown.
      */
-    private void change() throws SimulationException
+    private String change(boolean flag) throws SimulationException
     {
+        String changeReturned = "";
         double change = totalInserted % 100;
         BigDecimal bd = new BigDecimal(change).setScale(2, RoundingMode.HALF_UP);
         change = bd.doubleValue();
@@ -178,5 +183,26 @@ public class VendingMachine
         {
             changeReturned += 'n';
         }
+
+        if(flag)
+        {
+            for(int i = 0; i < changeReturned.split("").length; i++)
+            {
+                if (changeReturned.split("")[i] == "q")
+                {
+                    numQ--;
+                }
+                if (changeReturned.split("")[i] == "n")
+                {
+                    numN--;
+                }
+                if (changeReturned.split("")[i] == "d")
+                {
+                    numD--;
+                }
+
+            }
+        }
+        return changeReturned;
     }
 }
